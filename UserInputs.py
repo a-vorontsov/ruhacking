@@ -7,9 +7,9 @@ attackButton.dir(mraa.DIR_IN)
 otherButton = mraa.Gpio(31)
 otherButton.dir(mraa.DIR_IN)
 
-# Other One
-otherButton = mraa.Gpio(31)
-otherButton.dir(mraa.DIR_IN)
+# Inventory Button
+invButton = mraa.Gpio(33)
+invButton.dir(mraa.DIR_IN)
 
 # Movement sensor
 moveSensor = mraa.I2c(1)
@@ -26,6 +26,7 @@ def NormalPlayerCode(TCP_IP, TCP_PORT):
         sentMess = ""
         attackInt = int(attackButton.read())
         otherInt = int(otherButton.read())
+        inventoryInt = int(invButton.read())
         inputs = 
         [
             str(bin(moveSensor.readReg(0x00)))[2:], 
@@ -37,6 +38,9 @@ def NormalPlayerCode(TCP_IP, TCP_PORT):
             sentMess+="L"
         elif(otherInt == 1):
             sentMess+="R"
+        
+        if(inventoryInt == 1):
+            sentMess+="I"
         
         sentMess+=calcUpDown(inputs[0])
         sentMess+=calcLeftRight(inputs[2])
